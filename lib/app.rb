@@ -17,15 +17,14 @@ puts "|_|                                       "
 
 puts "\n"
 products_hash["items"].each do |item|
-  total_item_sales = 0
   sales_count = item['purchases'].count
 
   puts "Name: #{item['title']}"
   puts "Retail price: $#{item['full-price']}"
   puts "Number of purchases: #{sales_count}"
 
-  item['purchases'].each do |sale|
-    total_item_sales += sale["price"]
+  total_item_sales = item['purchases'].inject(0) do |sum, sale|
+    sum += sale["price"]
   end
 
   average_sale_price = total_item_sales / sales_count
@@ -53,20 +52,21 @@ products_hash["items"].each do |item|
 end
 
 brands.each do |brand,toys|
-  brand_toys_total_cost = brand_revenue = 0
+  brand_toys_total_cost = brand_revenue = toys_in_stock = 0
 
   puts "Brand: #{brand}"
-  puts "Number of Toys: #{toys.count}"
 
   toys.each do |toy|
     brand_toys_total_cost += toy["full-price"].to_f
-    toy["purchases"].each do |sale|
-      brand_revenue += sale["price"]
+    toys_in_stock += toy["stock"]
+    brand_revenue = toy["purchases"].inject(0) do |sum, sale|
+      sum += sale["price"]
     end
   end
 
   average_price = brand_toys_total_cost / toys.count
 
+  puts "Number of Toys in stock: #{toys_in_stock}"
   puts "Average price of each toy: $#{average_price.round(2)}"
   puts "Total revenue of all toys: $#{brand_revenue.round(2)}"
   puts "\n"
