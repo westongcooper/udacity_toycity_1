@@ -59,7 +59,7 @@ brands.each do |brand,toys|
   toys.each do |toy|
     brand_toys_total_cost += toy["full-price"].to_f
     toys_in_stock += toy["stock"]
-    brand_revenue = toy["purchases"].inject(0) do |sum, sale|
+    brand_revenue += toy["purchases"].inject(0) do |sum, sale|
       sum += sale["price"]
     end
   end
